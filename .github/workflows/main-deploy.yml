@@ -30,8 +30,8 @@ jobs:
         uses: actions/cache@v3
         with:
           path: |
-            ~/.gradle/caches/**/*
-            ~/.gradle/wrapper/**/*
+            ~/.gradle/caches
+            ~/.gradle/wrapper
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
           restore-keys: |
             ${{ runner.os }}-gradle-
@@ -53,6 +53,9 @@ jobs:
       - name: Make zip file
         run: |
           mkdir deploy
+          cp ./appspec.yml ./deploy/
+          cp ./Dockerfile ./deploy/
+          cp ./scripts/*.sh ./deploy/
           cp ./build/libs/*.jar ./deploy/
           zip -r -qq -j ./spring-build.zip ./deploy
           
@@ -67,4 +70,10 @@ jobs:
         run: |
           aws s3 cp \
             --region ap-northeast-2 \
-            ./spring-build.zip s3://tcat-spring
+            ./spring-build.zip s3://jeonsg-bucket
+      # 추가
+      - name: Code Deploy
+        run: aws deploy create-deployment --application-name spring-deploy
+          --deployment-config-name CodeDeployDefault.OneAtATime
+          --deployment-group-name spring-deploy-group
+          --s3-location bucket=tcat-spring,bundleType=zip,key=spring-build.zip
