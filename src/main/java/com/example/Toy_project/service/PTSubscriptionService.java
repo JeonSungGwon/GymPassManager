@@ -3,12 +3,11 @@ package com.example.Toy_project.service;
 import com.example.Toy_project.dto.MemberResponseDto;
 import com.example.Toy_project.dto.PTSubscriptionRequestDTO;
 import com.example.Toy_project.dto.ReservationRequestDTO;
-import com.example.Toy_project.entity.Member;
-import com.example.Toy_project.entity.PTSubscription;
-import com.example.Toy_project.entity.Reservation;
+import com.example.Toy_project.entity.*;
 import com.example.Toy_project.repository.MemberRepository;
 import com.example.Toy_project.repository.PTSubscriptionRepository;
 import com.example.Toy_project.repository.ReservationRepository;
+import com.example.Toy_project.repository.TrainerRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -17,6 +16,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
+import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -31,56 +31,71 @@ public class PTSubscriptionService {
     private final ReservationRepository reservationRepository;
 
     private final MemberRepository memberRepository;
+    private final TrainerRepository trainerRepository;
     private final MemberService memberService;
     private final ModelMapper modelMapper;
 
-    public PTSubscriptionService(PTSubscriptionRepository ptSubscriptionRepository, ReservationRepository reservationRepository, MemberService memberService, MemberRepository memberRepository, ModelMapper modelMapper) {
+    public PTSubscriptionService(PTSubscriptionRepository ptSubscriptionRepository, ReservationRepository reservationRepository, MemberService memberService,
+                                 MemberRepository memberRepository, ModelMapper modelMapper, TrainerRepository trainerRepository) {
         this.ptSubscriptionRepository = ptSubscriptionRepository;
         this.reservationRepository = reservationRepository;
         this.memberService = memberService;
-        this.memberRepository =memberRepository;
+        this.memberRepository = memberRepository;
+        this.trainerRepository = trainerRepository;
         this.modelMapper = modelMapper;
     }
 
-    public PTSubscriptionRequestDTO createPTSubscription(PTSubscriptionRequestDTO requestDTO) {
-        MemberResponseDto myInfoBySecurity = memberService.getMyInfoBySecurity();
+    @Transactional
+    public PTSubscriptionRequestDTO createPTSubscription(PTSubscriptionRequestDTO requestDTO,String memberEmail) {
+        Member member = memberRepository.findByEmail(memberEmail)
+                .orElseThrow(() -> new EntityNotFoundException("Member not found with email: " + memberEmail));
 
         PTSubscription ptSubscription = modelMapper.map(requestDTO, PTSubscription.class);
-        Member member = memberRepository.findById(myInfoBySecurity.getId()).orElseThrow(() -> new EntityNotFoundException("Member not found"));
-
         ptSubscription.setMember(member);
 
-
-        PTSubscription savedPtSubscription =ptSubscriptionRepository.save(ptSubscription);
+        PTSubscription savedPtSubscription = ptSubscriptionRepository.save(ptSubscription);
         PTSubscriptionRequestDTO responseDTO = modelMapper.map(savedPtSubscription, PTSubscriptionRequestDTO.class);
         responseDTO.setName(member.getName());
         return responseDTO;
     }
 
+    @Transactional
     public List<PTSubscriptionRequestDTO> getAllPTSubscriptions() {
         List<PTSubscription> ptSubscriptions = ptSubscriptionRepository.findAll();
         return ptSubscriptions.stream()
                 .map(ptSubscription -> {
-                    PTSubscriptionRequestDTO dto = modelMapper.map(ptSubscription,PTSubscriptionRequestDTO.class);
+                    PTSubscriptionRequestDTO dto = modelMapper.map(ptSubscription, PTSubscriptionRequestDTO.class);
                     dto.setName(ptSubscription.getMember().getName());
                     return dto;
                 })
                 .collect(Collectors.toList());
     }
 
-    public PTSubscription getPTSubscriptionById(Long id) {
-        return ptSubscriptionRepository.findById(id).orElse(null);
+    @Transactional
+    public PTSubscriptionRequestDTO getPTSubscriptionById(Long id) {
+        PTSubscription ptSubscription = ptSubscriptionRepository.findById(id).orElse(null);
+        PTSubscriptionRequestDTO dto = modelMapper.map(ptSubscription, PTSubscriptionRequestDTO.class);
+        dto.setName(ptSubscription.getMember().getName());
+        return dto;
     }
 
-    public PTSubscription updatePTSubscription(Long id, Integer availableCount, Integer usedCount) {
-        PTSubscription ptSubscription = getPTSubscriptionById(id);
-        ptSubscription.setAvailableCount(availableCount);
-        ptSubscription.setUsedCount(usedCount);
-        return ptSubscriptionRepository.save(ptSubscription);
+    @Transactional
+    public PTSubscriptionRequestDTO updatePTSubscription(Long id, PTSubscriptionRequestDTO requestDTO) {
+        PTSubscription ptSubscription = ptSubscriptionRepository.findById(id).orElse(null);
+        if (requestDTO.getAvailableCount() != null) {
+            ptSubscription.setAvailableCount(requestDTO.getAvailableCount());
+        }
+        if (requestDTO.getUsedCount() != null) {
+            ptSubscription.setUsedCount(requestDTO.getUsedCount());
+        }
+        requestDTO.setName(ptSubscription.getMember().getName());
+        PTSubscription savedPtSubscription = ptSubscriptionRepository.save(ptSubscription);
+        return modelMapper.map(savedPtSubscription, PTSubscriptionRequestDTO.class);
     }
 
+    @Transactional
     public void deletePTSubscription(Long id) {
-        PTSubscription ptSubscription = getPTSubscriptionById(id);
+        PTSubscription ptSubscription = ptSubscriptionRepository.findById(id).orElse(null);
         ptSubscriptionRepository.delete(ptSubscription);
     }
 
@@ -90,37 +105,63 @@ public class PTSubscriptionService {
         requestDTO.setMemberId(myInfoBySecurity.getId());
 
         Reservation reservation = modelMapper.map(requestDTO, Reservation.class);
-        Member member = memberRepository.findById(myInfoBySecurity.getId()).orElseThrow(() -> new EntityNotFoundException("Member not found"));
+        Member member = memberRepository.findById(myInfoBySecurity.getId())
+                .orElseThrow(() -> new EntityNotFoundException("Member not found"));
+        System.out.println(requestDTO.getReservationTrainerId());
+        Trainer trainer = trainerRepository.findById(requestDTO.getReservationTrainerId()).orElse(null);
         reservation.setMember(member);
-
-        Reservation savedReservation =reservationRepository.save(reservation);
+        reservation.setTrainer(trainer);
+        Reservation savedReservation = reservationRepository.save(reservation);
 
         return modelMapper.map(savedReservation, ReservationRequestDTO.class);
     }
+
+    @Transactional
     public List<ReservationRequestDTO> getAllReservations() {
         List<Reservation> reservations = reservationRepository.findAll();
         return reservations.stream()
                 .map(reservation -> {
-                    ReservationRequestDTO dto = modelMapper.map(reservation,ReservationRequestDTO.class);
-                    dto.setName(reservation.getMember().getName());
+                    ReservationRequestDTO dto = modelMapper.map(reservation, ReservationRequestDTO.class);
+                    dto.setMemberName(reservation.getMember().getName()); // 멤버 이름 설정
+                    dto.setTrainerName(reservation.getTrainer().getName()); // 트레이너 이름 설정
                     return dto;
                 })
                 .collect(Collectors.toList());
     }
 
 
-    // PT 예약 조회
-    //public List<Reservation> getReservationsByPTSubscription(PTSubscription ptSubscription) {
-      //  return reservationRepository.findByptSubscription(ptSubscription);
-    //}
-
     // PT 예약 취소
-    public void cancelReservation(Reservation reservation) {
-        reservationRepository.delete(reservation);
+    public void cancelReservation() {
+        MemberResponseDto myInfoBySecurity = memberService.getMyInfoBySecurity();
+        Member member = memberRepository.findById(myInfoBySecurity.getId())
+                .orElseThrow(() -> new EntityNotFoundException("Member not found"));
+        LocalDateTime currentDateTime = LocalDateTime.now();
+
+        // 현재 사용자의 정보를 기반으로 현재 시간 이후의 예약 정보를 가져옵니다.
+        List<Reservation> reservations = reservationRepository.findByMemberAndReservationTimeAfter(member, currentDateTime);
+
+
+        for (Reservation reservation : reservations) {
+            reservationRepository.delete(reservation);
+        }
+
     }
 
-    public Reservation getReservationById(Long id) {
-        return reservationRepository.findById(id).orElse(null);
+    @Transactional
+    public ReservationRequestDTO getReservationByMe() {
+        MemberResponseDto myInfoBySecurity = memberService.getMyInfoBySecurity();
+        Member member = memberRepository.findById(myInfoBySecurity.getId())
+                .orElseThrow(() -> new EntityNotFoundException("Member not found"));
+
+        Reservation reservation = member.getReservations().stream()
+                .findFirst()
+                .orElseThrow(() -> new EntityNotFoundException("Reservation not found for the member"));
+
+        ReservationRequestDTO reservationRequestDTO = modelMapper.map(reservation, ReservationRequestDTO.class);
+        reservationRequestDTO.setMemberName(member.getName()); // 멤버 이름 설정
+        reservationRequestDTO.setTrainerName(reservation.getTrainer().getName()); // 트레이너 이름 설정
+
+        return reservationRequestDTO;
     }
 
     @Scheduled(cron = "0 * * * * *") // 매 시간마다 실행
@@ -132,7 +173,6 @@ public class PTSubscriptionService {
 
         for (Reservation reservation : reservations) {
             Member member = reservation.getMember();
-
             if (member.getPtSubscription() != null && member.getPtSubscription().getAvailableCount() > 0) {
                 PTSubscription ptSubscription = member.getPtSubscription();
 
@@ -147,7 +187,6 @@ public class PTSubscriptionService {
                 // PTSubscription 엔티티 저장
                 ptSubscriptionRepository.save(ptSubscription);
             }
-            reservationRepository.delete(reservation);
         }
     }
 }

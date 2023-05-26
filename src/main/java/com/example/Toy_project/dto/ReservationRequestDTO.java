@@ -13,6 +13,8 @@ import java.time.LocalDateTime;
 @Getter
 public class ReservationRequestDTO {
     private Long memberId;
-    private String name;
+    private Long reservationTrainerId;
+    private String memberName;
+    private String trainerName;
     private LocalDateTime reservationTime;
 }

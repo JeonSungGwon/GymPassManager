@@ -30,15 +30,13 @@ public class ReservationController {
         return ptSubscriptionService.getAllReservations();
     }
 
-    //@GetMapping("/pt-subscriptions/{id}")
-    //public List<Reservation> getReservationsByPTSubscription(@PathVariable Long id) {
-      //  PTSubscription ptSubscription = ptSubscriptionService.getPTSubscriptionById(id);
-        //return ptSubscriptionService.getReservationsByPTSubscription(ptSubscription);
-    //}
+    @GetMapping("user")
+    public ReservationRequestDTO getReservationByMe() {
+        return ptSubscriptionService.getReservationByMe();
+    }
 
-    @DeleteMapping("/{id}")
-    public void cancelReservation(@PathVariable Long id) {
-        Reservation reservation = ptSubscriptionService.getReservationById(id);
-        ptSubscriptionService.cancelReservation(reservation);
+    @DeleteMapping
+    public void cancelReservation() {
+        ptSubscriptionService.cancelReservation();
     }
 }

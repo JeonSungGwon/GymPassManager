@@ -7,6 +7,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Getter
@@ -21,8 +22,7 @@ public class PTSubscription {
     private int availableCount; // 사용 가능한 횟수
     private int usedCount; // 사용된 횟수
 
-    @OneToOne
-    @JoinColumn(name = "member_id")
+    @OneToOne(mappedBy = "ptSubscription")
     private Member member;
 }
 

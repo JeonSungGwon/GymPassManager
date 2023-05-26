@@ -29,9 +29,9 @@ public class PTSubscriptionController {
     }
 
     @PostMapping
-    public PTSubscriptionRequestDTO createPTSubscription(@RequestBody PTSubscriptionRequestDTO requestDTO) {
+    public PTSubscriptionRequestDTO createPTSubscription(@RequestBody PTSubscriptionRequestDTO requestDTO, @RequestParam String memberEmail) {
         // 요청 바디에서 필요한 정보를 추출하고 PTSubscription 생성
-        return ptSubscriptionService.createPTSubscription(requestDTO);
+        return ptSubscriptionService.createPTSubscription(requestDTO,memberEmail);
     }
 
     @GetMapping
@@ -39,17 +39,14 @@ public class PTSubscriptionController {
         return ptSubscriptionService.getAllPTSubscriptions();
     }
 
-    @GetMapping("/{id}")
-    public PTSubscription getPTSubscriptionById(@PathVariable Long id) {
+    @GetMapping("user")
+    public PTSubscriptionRequestDTO getPTSubscriptionByMe(@PathVariable Long id) {
         return ptSubscriptionService.getPTSubscriptionById(id);
     }
 
-    @PutMapping("/{id}")
-    public PTSubscription updatePTSubscription(@PathVariable Long id, @RequestBody PTSubscriptionRequestDTO requestDTO) {
-        // 요청 바디에서 필요한 정보를 추출하고 PTSubscription 업데이트
-        Integer availableCount = requestDTO.getAvailableCount();
-        Integer usedCount = requestDTO.getUsedCount();
-        return ptSubscriptionService.updatePTSubscription(id, availableCount, usedCount);
+    @PatchMapping("/{id}")
+    public PTSubscriptionRequestDTO updatePTSubscription(@PathVariable Long id, @RequestBody PTSubscriptionRequestDTO requestDTO) {
+        return ptSubscriptionService.updatePTSubscription(id, requestDTO);
     }
 
     @DeleteMapping("/{id}")

@@ -3,6 +3,8 @@ package com.example.Toy_project.entity;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -26,8 +28,13 @@ public class Member {
     @Enumerated(EnumType.STRING)
     private Authority authority;
 
-    @OneToOne(mappedBy = "member")
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id")
     private PTSubscription ptSubscription;
+
+    @OneToMany(mappedBy = "member")
+    private List<Reservation> reservations;
+
 
 
     public Member(Long memberId) {
