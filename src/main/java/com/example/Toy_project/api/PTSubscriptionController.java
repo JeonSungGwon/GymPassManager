@@ -14,7 +14,7 @@ import javax.persistence.EntityNotFoundException;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/pt-subscriptions")
+@RequestMapping("/api")
 public class PTSubscriptionController {
     private final PTSubscriptionService ptSubscriptionService;
     private final MemberService memberService;
@@ -28,28 +28,28 @@ public class PTSubscriptionController {
         this.ptSubscriptionRepository = ptSubscriptionRepository;
     }
 
-    @PostMapping
+    @PostMapping("/admin/pt-subscriptions")
     public PTSubscriptionRequestDTO createPTSubscription(@RequestBody PTSubscriptionRequestDTO requestDTO, @RequestParam String memberEmail) {
         // 요청 바디에서 필요한 정보를 추출하고 PTSubscription 생성
         return ptSubscriptionService.createPTSubscription(requestDTO,memberEmail);
     }
 
-    @GetMapping
+    @GetMapping("/admin/pt-subscriptions")
     public List<PTSubscriptionRequestDTO> getAllPTSubscriptions() {
         return ptSubscriptionService.getAllPTSubscriptions();
     }
 
-    @GetMapping("user")
+    @GetMapping("/pt-subscriptions/user")
     public PTSubscriptionRequestDTO getPTSubscriptionByMe(@PathVariable Long id) {
         return ptSubscriptionService.getPTSubscriptionById(id);
     }
 
-    @PatchMapping("/{id}")
+    @PatchMapping("/admin/pt-subscriptions/{id}")
     public PTSubscriptionRequestDTO updatePTSubscription(@PathVariable Long id, @RequestBody PTSubscriptionRequestDTO requestDTO) {
         return ptSubscriptionService.updatePTSubscription(id, requestDTO);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/admin/pt-subscriptions/{id}")
     public void deletePTSubscription(@PathVariable Long id) {
         ptSubscriptionService.deletePTSubscription(id);
     }

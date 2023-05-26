@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/reservations")
+@RequestMapping("/api")
 public class ReservationController {
     private final PTSubscriptionService ptSubscriptionService;
 
@@ -19,13 +19,13 @@ public class ReservationController {
         this.ptSubscriptionService = ptSubscriptionService;
     }
 
-    @PostMapping
+    @PostMapping("/reservations")
     public ReservationRequestDTO createReservation(@RequestBody ReservationRequestDTO requestDTO) {
         // 요청 바디에서 필요한 정보를 추출하고 PTSubscription과 예약 시간으로 Reservation 생성
         return ptSubscriptionService.createReservation(requestDTO);
     }
 
-    @GetMapping
+    @GetMapping("/admin/reservations")
     public List<ReservationRequestDTO> getAllReservations() {
         return ptSubscriptionService.getAllReservations();
     }

@@ -49,11 +49,13 @@ public class PTSubscriptionService {
     public PTSubscriptionRequestDTO createPTSubscription(PTSubscriptionRequestDTO requestDTO,String memberEmail) {
         Member member = memberRepository.findByEmail(memberEmail)
                 .orElseThrow(() -> new EntityNotFoundException("Member not found with email: " + memberEmail));
+        System.out.println(member.getName());
 
         PTSubscription ptSubscription = modelMapper.map(requestDTO, PTSubscription.class);
         ptSubscription.setMember(member);
 
         PTSubscription savedPtSubscription = ptSubscriptionRepository.save(ptSubscription);
+        System.out.println(savedPtSubscription.getMember().getName());
         PTSubscriptionRequestDTO responseDTO = modelMapper.map(savedPtSubscription, PTSubscriptionRequestDTO.class);
         responseDTO.setName(member.getName());
         return responseDTO;
@@ -173,7 +175,7 @@ public class PTSubscriptionService {
 
         for (Reservation reservation : reservations) {
             Member member = reservation.getMember();
-            if (member.getPtSubscription() != null && member.getPtSubscription().getAvailableCount() > 0) {
+            if (member.getPtSubscription() != null && member.getPtSubscription().getAvailableCount() > 0 && !reservation.isExpired()) {
                 PTSubscription ptSubscription = member.getPtSubscription();
 
                 // 사용 가능한 횟수 차감
@@ -183,7 +185,7 @@ public class PTSubscriptionService {
                 // 사용된 횟수 증가
                 int usedCount = ptSubscription.getUsedCount();
                 ptSubscription.setUsedCount(usedCount + 1);
-
+                reservation.setExpired(true);
                 // PTSubscription 엔티티 저장
                 ptSubscriptionRepository.save(ptSubscription);
             }

@@ -22,7 +22,8 @@ public class PTSubscription {
     private int availableCount; // 사용 가능한 횟수
     private int usedCount; // 사용된 횟수
 
-    @OneToOne(mappedBy = "ptSubscription")
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id")
     private Member member;
 }
 

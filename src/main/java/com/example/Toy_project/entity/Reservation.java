@@ -30,4 +30,7 @@ public class Reservation {
     @JoinColumn(name = "trainer_id")
     private Trainer trainer;
 
+    @Column(nullable = false)
+    private boolean expired = false;
+
 }

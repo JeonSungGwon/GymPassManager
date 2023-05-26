@@ -28,8 +28,7 @@ public class Member {
     @Enumerated(EnumType.STRING)
     private Authority authority;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id")
+    @OneToOne(fetch = FetchType.LAZY, mappedBy = "member")
     private PTSubscription ptSubscription;
 
     @OneToMany(mappedBy = "member")
