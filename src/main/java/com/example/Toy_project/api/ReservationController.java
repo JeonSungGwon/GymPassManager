@@ -30,7 +30,7 @@ public class ReservationController {
         return ptSubscriptionService.getAllReservations();
     }
 
-    @GetMapping("user")
+    @GetMapping("/user")
     public ReservationRequestDTO getReservationByMe() {
         return ptSubscriptionService.getReservationByMe();
     }

@@ -12,8 +12,8 @@ spring:
     password: wjstjd741
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
-    url: jdbc:mysql://db-toy.cxxbaik4ynam.ap-northeast-2.rds.amazonaws.com:3306/ToyDB?guseUnicode=true&characterEncoding=UTF-8
-    #url: jdbc:mysql://localhost:3306/project2?guseUnicode=true&characterEncoding=UTF-8
+    #url: jdbc:mysql://db-toy.cxxbaik4ynam.ap-northeast-2.rds.amazonaws.com:3306/ToyDB?guseUnicode=true&characterEncoding=UTF-8
+    url: jdbc:mysql://localhost:3306/project2?guseUnicode=true&characterEncoding=UTF-8
 
   mvc:
     pathmatch:
