@@ -72,10 +72,12 @@ public class PTSubscriptionService {
                 })
                 .collect(Collectors.toList());
     }
-
     @Transactional
-    public PTSubscriptionRequestDTO getPTSubscriptionById(Long id) {
-        PTSubscription ptSubscription = ptSubscriptionRepository.findById(id).orElse(null);
+    public PTSubscriptionRequestDTO getPTSubscriptionByMe() {
+        MemberResponseDto myInfoBySecurity = memberService.getMyInfoBySecurity();
+        Member member = memberRepository.findById(myInfoBySecurity.getId())
+                .orElseThrow(() -> new EntityNotFoundException("Member not found"));
+        PTSubscription ptSubscription = member.getPtSubscription();
         PTSubscriptionRequestDTO dto = modelMapper.map(ptSubscription, PTSubscriptionRequestDTO.class);
         dto.setName(ptSubscription.getMember().getName());
         return dto;
@@ -158,7 +160,6 @@ public class PTSubscriptionService {
         Reservation reservation = member.getReservations().stream()
                 .findFirst()
                 .orElseThrow(() -> new EntityNotFoundException("Reservation not found for the member"));
-
         ReservationRequestDTO reservationRequestDTO = modelMapper.map(reservation, ReservationRequestDTO.class);
         reservationRequestDTO.setMemberName(member.getName()); // 멤버 이름 설정
         reservationRequestDTO.setTrainerName(reservation.getTrainer().getName()); // 트레이너 이름 설정

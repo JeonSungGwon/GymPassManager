@@ -40,8 +40,8 @@ public class PTSubscriptionController {
     }
 
     @GetMapping("/pt-subscriptions/user")
-    public PTSubscriptionRequestDTO getPTSubscriptionByMe(@PathVariable Long id) {
-        return ptSubscriptionService.getPTSubscriptionById(id);
+    public PTSubscriptionRequestDTO getPTSubscriptionByMe() {
+        return ptSubscriptionService.getPTSubscriptionByMe();
     }
 
     @PatchMapping("/admin/pt-subscriptions/{id}")
