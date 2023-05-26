@@ -23,7 +23,7 @@ public class MemberRequestDto {
                 .email(email)
                 .password(passwordEncoder.encode(password))
                 .name(name)
-                .authority(Authority.ROLE_ADMIN)
+                .authority(Authority.ROLE_USER)
                 .build();
     }
 
