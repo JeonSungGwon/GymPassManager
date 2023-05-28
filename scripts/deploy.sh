@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo "> 현재 실행 중인 Docker 컨테이너 pid 확인" >> /home/ubuntu/deploy.log
+echo "> 현재 실행 중인 Docker 컨테이너 pid 확인" >> /home/ubuntu/Toy-project
 CURRENT_PID=$(sudo docker container ls -q)
 
 if [ -z $CURRENT_PID ]
@@ -12,6 +12,6 @@ else
   sleep 5
 fi
 
-cd /home/ubuntu/app
-sudo docker build -t tcat-api-spring-boot-docker .
-sudo docker run -d -p 8080:8080 tcat-api-spring-boot-docker
+cd /home/ubuntu/Toy-project
+sudo docker build -t image:v1.0 .
+sudo docker run -d -p 8080:8080 image:v1.0
