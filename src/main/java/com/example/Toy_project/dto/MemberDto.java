@@ -11,6 +11,8 @@ public class MemberDto {
     private Long id;
     private String email;
     private String name;
+
+    private String gender;
     private Authority authority;
 
     @Builder

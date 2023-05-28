@@ -10,7 +10,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class PTSubscriptionRequestDTO {
-    private Integer availableCount;
     private String name;
+    private Integer availableCount;
     private Integer usedCount;
 }

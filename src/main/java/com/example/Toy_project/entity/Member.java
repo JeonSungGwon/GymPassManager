@@ -3,6 +3,7 @@ package com.example.Toy_project.entity;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.Pattern;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,6 +25,10 @@ public class Member {
 
     @Column(nullable = false)
     private String name;
+
+    @Column(nullable = false)
+    @Pattern(regexp = "^(Male|Female)$", message = "성별은 Male 또는 Female이어야 합니다.")
+    private String gender;
 
     @Enumerated(EnumType.STRING)
     private Authority authority;
@@ -51,11 +56,12 @@ public class Member {
 
 
     @Builder
-    public Member(Long id, String email, String password, String name, Authority authority) {
+    public Member(Long id, String email, String password, String name, String gender, Authority authority) {
         this.id = id;
         this.email = email;
         this.password = password;
         this.name = name;
+        this.gender = gender;
         this.authority = authority;
     }
 }

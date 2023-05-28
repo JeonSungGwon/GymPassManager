@@ -15,11 +15,13 @@ public class MemberResponseDto {
     private Long id;
     private String email;
     private String name;
+    private String gender;
 
     public static MemberResponseDto of(Member member) {
         return MemberResponseDto.builder()
                 .email(member.getEmail())
                 .name(member.getName())
+                .gender(member.getGender())
                 .id(member.getId())
                 .build();
     }
