@@ -36,6 +36,9 @@ public class Member {
     @OneToOne(fetch = FetchType.LAZY, mappedBy = "member")
     private PTSubscription ptSubscription;
 
+    @OneToOne(fetch = FetchType.LAZY, mappedBy = "member")
+    private GymMembership gymMembership;
+
     @OneToMany(mappedBy = "member")
     private List<Reservation> reservations;
 

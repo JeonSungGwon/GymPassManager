@@ -152,19 +152,25 @@ public class PTSubscriptionService {
     }
 
     @Transactional
-    public ReservationRequestDTO getReservationByMe() {
+    public List<ReservationRequestDTO> getReservationsByMe() {
         MemberResponseDto myInfoBySecurity = memberService.getMyInfoBySecurity();
         Member member = memberRepository.findById(myInfoBySecurity.getId())
                 .orElseThrow(() -> new EntityNotFoundException("Member not found"));
 
-        Reservation reservation = member.getReservations().stream()
-                .findFirst()
-                .orElseThrow(() -> new EntityNotFoundException("Reservation not found for the member"));
-        ReservationRequestDTO reservationRequestDTO = modelMapper.map(reservation, ReservationRequestDTO.class);
-        reservationRequestDTO.setMemberName(member.getName()); // 멤버 이름 설정
-        reservationRequestDTO.setTrainerName(reservation.getTrainer().getName()); // 트레이너 이름 설정
+        List<Reservation> reservations = member.getReservations();
 
-        return reservationRequestDTO;
+        if (reservations.isEmpty()) {
+            throw new EntityNotFoundException("Reservations not found for the member");
+        }
+
+        return reservations.stream()
+                .map(reservation -> {
+                    ReservationRequestDTO reservationRequestDTO = modelMapper.map(reservation, ReservationRequestDTO.class);
+                    reservationRequestDTO.setMemberName(member.getName());
+                    reservationRequestDTO.setTrainerName(reservation.getTrainer().getName());
+                    return reservationRequestDTO;
+                })
+                .collect(Collectors.toList());
     }
 
     @Scheduled(cron = "0 * * * * *") // 매 시간마다 실행

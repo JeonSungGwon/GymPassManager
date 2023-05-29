@@ -31,8 +31,8 @@ public class ReservationController {
     }
 
     @GetMapping("/user")
-    public ReservationRequestDTO getReservationByMe() {
-        return ptSubscriptionService.getReservationByMe();
+    public List<ReservationRequestDTO> getReservationByMe() {
+        return ptSubscriptionService.getReservationsByMe();
     }
 
     @DeleteMapping
