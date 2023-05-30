@@ -193,6 +193,8 @@ public class PTSubscriptionService {
                 int usedCount = ptSubscription.getUsedCount();
                 ptSubscription.setUsedCount(usedCount + 1);
                 reservation.setExpired(true);
+
+                reservationRepository.save(reservation);
                 // PTSubscription 엔티티 저장
                 ptSubscriptionRepository.save(ptSubscription);
             }
