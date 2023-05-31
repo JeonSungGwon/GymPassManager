@@ -25,7 +25,7 @@ public class MemberController {
         // return ResponseEntity.ok(memberService.getMyInfoBySecurity());
     }
 
-    @PostMapping("/nickname")
+    @PostMapping("/nickname1")
     public ResponseEntity<MemberResponseDto> setMemberNickname(@RequestBody MemberRequestDto request) {
         return ResponseEntity.ok(memberService.changeMemberNickname(request.getEmail(), request.getName()));
     }
