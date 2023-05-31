@@ -30,7 +30,7 @@ public class MemberController {
         return ResponseEntity.ok(memberService.changeMemberNickname(request.getEmail(), request.getName()));
     }
 
-    @GetMapping("/api/admin/member")
+    @GetMapping("/api/admin/members")
     public List<MemberResponseDto> getMembers(){
         return memberService.getAllMembers();
     }
