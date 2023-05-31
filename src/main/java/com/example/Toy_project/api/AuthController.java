@@ -20,7 +20,7 @@ public class AuthController {
 
     private final TokenProvider tokenProvider;
 
-    @PostMapping("/signupl")
+    @PostMapping("/signup")
     public ResponseEntity<MemberResponseDto> signup(@RequestBody MemberRequestDto requestDto) {
         return ResponseEntity.ok(authService.signup(requestDto));
     }
