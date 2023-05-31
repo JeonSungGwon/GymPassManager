@@ -15,7 +15,7 @@ public class MemberController {
 
     private final MemberService memberService;
 
-    @GetMapping("/mee")
+    @GetMapping("/mea")
     public ResponseEntity<MemberResponseDto> getMyMemberInfo() {
         MemberResponseDto myInfoBySecurity = memberService.getMyInfoBySecurity();
         System.out.println("배포 자동화 잘 됨");
