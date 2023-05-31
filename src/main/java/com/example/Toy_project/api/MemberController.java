@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("member")
@@ -26,6 +28,11 @@ public class MemberController {
     @PostMapping("/nickname")
     public ResponseEntity<MemberResponseDto> setMemberNickname(@RequestBody MemberRequestDto request) {
         return ResponseEntity.ok(memberService.changeMemberNickname(request.getEmail(), request.getName()));
+    }
+
+    @GetMapping("/admin")
+    public List<MemberResponseDto> getMembers(){
+        return memberService.getAllMembers();
     }
 
     @PostMapping("/password")

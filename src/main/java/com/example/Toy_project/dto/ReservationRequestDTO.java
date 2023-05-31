@@ -12,9 +12,12 @@ import java.time.LocalDateTime;
 @Setter
 @Getter
 public class ReservationRequestDTO {
+
+    private Long id;
     private Long memberId;
-    private Long reservationTrainerId;
     private String memberName;
+    private String memberEmail;
+    private Long reservationTrainerId;
     private String trainerName;
     private LocalDateTime reservationTime;
 }
