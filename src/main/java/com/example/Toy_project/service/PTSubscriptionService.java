@@ -93,9 +93,10 @@ public class PTSubscriptionService {
         if (requestDTO.getUsedCount() != null) {
             ptSubscription.setUsedCount(requestDTO.getUsedCount());
         }
-        requestDTO.setName(ptSubscription.getMember().getName());
         PTSubscription savedPtSubscription = ptSubscriptionRepository.save(ptSubscription);
-        return modelMapper.map(savedPtSubscription, PTSubscriptionRequestDTO.class);
+        PTSubscriptionRequestDTO dto = modelMapper.map(savedPtSubscription, PTSubscriptionRequestDTO.class);
+        dto.setName(ptSubscription.getMember().getName());
+        return dto;
     }
 
     @Transactional
