@@ -46,8 +46,13 @@ public class ReservationController {
 //        return reservationService.updateMyReservation(requestDTO);
 //    }
 
-    @DeleteMapping
-    public void cancelReservation() {
-        reservationService.cancelReservation();
+    @DeleteMapping()
+    public void cancelReservationMe() {
+        reservationService.cancelReservationMe();
+    }
+
+    @DeleteMapping("/{id}")
+    public void cancelReservation(@PathVariable Long id) {
+        reservationService.cancelReservation(id);
     }
 }

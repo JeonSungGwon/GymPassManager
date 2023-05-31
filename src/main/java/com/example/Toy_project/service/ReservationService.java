@@ -110,7 +110,8 @@ public class ReservationService {
 
 
     // PT 예약 취소
-    public void cancelReservation() {
+    @Transactional
+    public void cancelReservationMe() {
         MemberResponseDto myInfoBySecurity = memberService.getMyInfoBySecurity();
         Member member = memberRepository.findById(myInfoBySecurity.getId())
                 .orElseThrow(() -> new EntityNotFoundException("Member not found"));
@@ -123,6 +124,12 @@ public class ReservationService {
         for (Reservation reservation : reservations) {
             reservationRepository.delete(reservation);
         }
+
+    }
+    @Transactional
+    public void cancelReservation(Long id) {
+        Reservation reservation = reservationRepository.findById(id).orElse(null);
+        reservationRepository.delete(reservation);
 
     }
 
