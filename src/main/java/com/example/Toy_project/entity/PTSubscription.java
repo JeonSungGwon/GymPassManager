@@ -19,8 +19,8 @@ public class PTSubscription {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private int availableCount; // 사용 가능한 횟수
-    private int usedCount; // 사용된 횟수
+    private int availableCount=0; // 사용 가능한 횟수
+    private int usedCount=0; // 사용된 횟수
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")

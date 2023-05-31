@@ -3,6 +3,8 @@ package com.example.Toy_project.dto;
 import com.example.Toy_project.entity.Authority;
 import lombok.*;
 
+import java.time.LocalDate;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -12,6 +14,9 @@ public class MemberDto {
     private String email;
     private String name;
     private String gender;
+    private LocalDate gymMembershipStart;
+    private LocalDate gymMembershipEnd;
+    private String ptSubscription;
     private Authority authority;
 
     @Builder

@@ -40,6 +40,8 @@ public class MemberService {
                 .collect(Collectors.toList());
     }
 
+
+
     @Transactional
     public MemberResponseDto changeMemberNickname(String email, String nickname) {
         Member member = memberRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("로그인 유저 정보가 없습니다"));
