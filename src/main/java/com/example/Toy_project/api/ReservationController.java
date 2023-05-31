@@ -36,15 +36,15 @@ public class ReservationController {
         return reservationService.getReservationsByMe();
     }
 
-    @PatchMapping("/admin/reservations/{id}")
+    @PatchMapping("/reservations/{id}")
     public ReservationRequestDTO updateReservation(@PathVariable Long id, @RequestBody ReservationRequestDTO requestDTO){
         return reservationService.updateReservation(id, requestDTO);
     }
 
-    @PatchMapping("/reservations")
-    public ReservationRequestDTO updateMyReservation(@RequestBody ReservationRequestDTO requestDTO){
-        return reservationService.updateMyReservation(requestDTO);
-    }
+//    @PatchMapping("/reservations")
+//    public ReservationRequestDTO updateMyReservation(@RequestBody ReservationRequestDTO requestDTO){
+//        return reservationService.updateMyReservation(requestDTO);
+//    }
 
     @DeleteMapping
     public void cancelReservation() {
