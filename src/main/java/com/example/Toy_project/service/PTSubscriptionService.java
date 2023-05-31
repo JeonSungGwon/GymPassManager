@@ -100,8 +100,9 @@ public class PTSubscriptionService {
     }
 
     @Transactional
-    public void deletePTSubscription(Long id) {
-        PTSubscription ptSubscription = ptSubscriptionRepository.findById(id).orElse(null);
+    public void deletePTSubscription(String memberEmail) {
+        Member member = memberRepository.findByEmail(memberEmail).orElse(null);
+        PTSubscription ptSubscription = member.getPtSubscription();
         ptSubscriptionRepository.delete(ptSubscription);
     }
 

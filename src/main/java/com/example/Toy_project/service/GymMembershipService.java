@@ -65,8 +65,9 @@ public class GymMembershipService {
     }
 
     @Transactional
-    public GymMembershipDTO updateGymMembership(Long id, GymMembershipDTO requestDTO) {
-        GymMembership gymMembership = gymMembershipRepository.findById(id).orElse(null);
+    public GymMembershipDTO updateGymMembership(GymMembershipDTO requestDTO, String memberEmail) {
+        Member member = memberRepository.findByEmail(memberEmail).orElse(null);
+        GymMembership gymMembership = member.getGymMembership();
         if (requestDTO.getStartDate()!= null) {
             System.out.println(requestDTO.getStartDate());
             gymMembership.setStartDate(requestDTO.getStartDate());
@@ -80,8 +81,9 @@ public class GymMembershipService {
     }
 
     @Transactional
-    public void deleteGymMembership(Long id) {
-        GymMembership gymMembership = gymMembershipRepository.findById(id).orElse(null);
+    public void deleteGymMembership(String memberEmail) {
+        Member member = memberRepository.findByEmail(memberEmail).orElse(null);
+        GymMembership gymMembership = member.getGymMembership();
         gymMembershipRepository.delete(gymMembership);
     }
 }

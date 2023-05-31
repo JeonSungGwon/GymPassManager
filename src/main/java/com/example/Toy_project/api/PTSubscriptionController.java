@@ -28,7 +28,7 @@ public class PTSubscriptionController {
         this.ptSubscriptionRepository = ptSubscriptionRepository;
     }
 
-    @PostMapping("/pt-subscriptions")
+    @PostMapping("/admin/pt-subscriptions")
     public PTSubscriptionRequestDTO createPTSubscription(@RequestBody PTSubscriptionRequestDTO requestDTO, @RequestParam String memberEmail) {
         // 요청 바디에서 필요한 정보를 추출하고 PTSubscription 생성
         return ptSubscriptionService.createPTSubscription(requestDTO,memberEmail);
@@ -49,8 +49,8 @@ public class PTSubscriptionController {
         return ptSubscriptionService.updatePTSubscription(requestDTO, memberEmail);
     }
 
-    @DeleteMapping("/admin/pt-subscriptions/{id}")
-    public void deletePTSubscription(@PathVariable Long id) {
-        ptSubscriptionService.deletePTSubscription(id);
+    @DeleteMapping("/admin/pt-subscriptions")
+    public void deletePTSubscription(@RequestParam String memberEmail) {
+        ptSubscriptionService.deletePTSubscription(memberEmail);
     }
 }

@@ -44,13 +44,13 @@ public class GymMembershipController {
             return gymMembershipService.getGymMembershipByMe();
         }
 
-        @PatchMapping("/admin/GymMembership/{id}")
-        public GymMembershipDTO updateGymMembership(@PathVariable Long id, @RequestBody GymMembershipDTO requestDTO) {
-            return gymMembershipService.updateGymMembership(id, requestDTO);
+        @PatchMapping("/admin/GymMembership")
+        public GymMembershipDTO updateGymMembership(@RequestBody GymMembershipDTO requestDTO,  @RequestParam String memberEmail) {
+            return gymMembershipService.updateGymMembership(requestDTO, memberEmail);
         }
 
-        @DeleteMapping("/admin/GymMembership/{id}")
-        public void deleteGymMembership(@PathVariable Long id) {
-            gymMembershipService.deleteGymMembership(id);
+        @DeleteMapping("/admin/GymMembership")
+        public void deleteGymMembership(@RequestParam String memberEmail) {
+            gymMembershipService.deleteGymMembership(memberEmail);
         }
     }
