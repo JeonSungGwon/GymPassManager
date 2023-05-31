@@ -1,7 +1,7 @@
-FROM openjdk:11-jre-slim
+FROM openjdk:11
 
-ARG JAR_FILE=build/libs/Toy_project-0.0.1-SNAPSHOT.jar
+WORKDIR /Toy-project
 
-COPY ${JAR_FILE} app.jar
+COPY Toy_project-0.0.1-SNAPSHOT.jar app.jar
 
-CMD ["java", "-jar", "/app.jar"]
+ENTRYPOINT ["java","-jar","app.jar"]
