@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo "> 현재 실행 중인 Docker 컨테이너 pid 확인" >> /home/ubuntu/deploy.log
+echo "> 현재 실행 중인 Docker 컨테이너 pid 확인dlqldldl" >> /home/ubuntu/deploy.log
 CURRENT_PID=$(sudo docker container ls -q)
 
 if [ -z $CURRENT_PID ]
