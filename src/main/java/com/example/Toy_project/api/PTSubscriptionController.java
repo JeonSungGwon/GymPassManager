@@ -28,7 +28,7 @@ public class PTSubscriptionController {
         this.ptSubscriptionRepository = ptSubscriptionRepository;
     }
 
-    @PostMapping("/admin/pt-subscriptions")
+    @PostMapping("/pt-subscriptions")
     public PTSubscriptionRequestDTO createPTSubscription(@RequestBody PTSubscriptionRequestDTO requestDTO, @RequestParam String memberEmail) {
         // 요청 바디에서 필요한 정보를 추출하고 PTSubscription 생성
         return ptSubscriptionService.createPTSubscription(requestDTO,memberEmail);
