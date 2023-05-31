@@ -17,8 +17,8 @@ public class GymMembership {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private LocalDate startDate;
-    private LocalDate endDate;
+    private LocalDate startDate = LocalDate.of(0, 1, 1);
+    private LocalDate endDate = LocalDate.of(0, 1, 1);
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
