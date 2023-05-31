@@ -12,7 +12,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("member")
+@RequestMapping()
 public class MemberController {
 
     private final MemberService memberService;
@@ -30,7 +30,7 @@ public class MemberController {
         return ResponseEntity.ok(memberService.changeMemberNickname(request.getEmail(), request.getName()));
     }
 
-    @GetMapping("/admin")
+    @GetMapping("/admin/member")
     public List<MemberResponseDto> getMembers(){
         return memberService.getAllMembers();
     }
