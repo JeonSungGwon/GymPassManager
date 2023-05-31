@@ -68,6 +68,7 @@ public class GymMembershipService {
     public GymMembershipDTO updateGymMembership(Long id, GymMembershipDTO requestDTO) {
         GymMembership gymMembership = gymMembershipRepository.findById(id).orElse(null);
         if (requestDTO.getStartDate()!= null) {
+            System.out.println(requestDTO.getStartDate());
             gymMembership.setStartDate(requestDTO.getStartDate());
         }
         if (requestDTO.getEndDate()!= null) {

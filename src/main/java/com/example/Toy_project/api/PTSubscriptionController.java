@@ -44,9 +44,9 @@ public class PTSubscriptionController {
         return ptSubscriptionService.getPTSubscriptionByMe();
     }
 
-    @PatchMapping("/admin/pt-subscriptions/{id}")
-    public PTSubscriptionRequestDTO updatePTSubscription(@PathVariable Long id, @RequestBody PTSubscriptionRequestDTO requestDTO) {
-        return ptSubscriptionService.updatePTSubscription(id, requestDTO);
+    @PatchMapping("/admin/pt-subscriptions")
+    public PTSubscriptionRequestDTO updatePTSubscription(@RequestBody PTSubscriptionRequestDTO requestDTO,@RequestParam String memberEmail) {
+        return ptSubscriptionService.updatePTSubscription(requestDTO, memberEmail);
     }
 
     @DeleteMapping("/admin/pt-subscriptions/{id}")

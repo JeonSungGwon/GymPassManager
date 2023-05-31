@@ -84,8 +84,9 @@ public class PTSubscriptionService {
     }
 
     @Transactional
-    public PTSubscriptionRequestDTO updatePTSubscription(Long id, PTSubscriptionRequestDTO requestDTO) {
-        PTSubscription ptSubscription = ptSubscriptionRepository.findById(id).orElse(null);
+    public PTSubscriptionRequestDTO updatePTSubscription(PTSubscriptionRequestDTO requestDTO,String memberEmail) {
+        Member member = memberRepository.findByEmail(memberEmail).orElse(null);
+        PTSubscription ptSubscription = member.getPtSubscription();
         if (requestDTO.getAvailableCount() != null) {
             ptSubscription.setAvailableCount(requestDTO.getAvailableCount());
         }
